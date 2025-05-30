@@ -1,0 +1,12 @@
+PARA CONECTARSE
+Url: https://labremoto.com/
+user: sql1
+pwd: Mikr0%Servicios
+
+ADMIN MÁQUINA (sudo terminal)
+user: root
+pwd: Mikr0%Servicios
+
+BASE DATOS 
+user: root
+pwd: root

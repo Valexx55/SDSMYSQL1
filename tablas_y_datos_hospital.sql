@@ -142,14 +142,13 @@ CREATE TABLE `pacientes` (
   `apellido` varchar(30) DEFAULT NULL,
   `genero` varchar(1) DEFAULT NULL,
   `fecha_nacimiento` date DEFAULT NULL,
-  `poblacion` varchar(30) DEFAULT NULL,
   `peso` decimal(4,1) DEFAULT NULL,
   `altura` decimal(3,2) DEFAULT NULL,
   `poblacion_id` int DEFAULT NULL,
   PRIMARY KEY (`paciente_id`),
   KEY `poblacion_id` (`poblacion_id`),
   CONSTRAINT `pacientes_ibfk_1` FOREIGN KEY (`poblacion_id`) REFERENCES `poblaciones` (`poblacion_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +157,7 @@ CREATE TABLE `pacientes` (
 
 LOCK TABLES `pacientes` WRITE;
 /*!40000 ALTER TABLE `pacientes` DISABLE KEYS */;
-INSERT INTO `pacientes` VALUES (1,'Juan','Pérez','M','1985-06-15','Alcalá de Henares',72.5,1.75,1),(2,'María','Gómez','F','1990-03-22','Hospitalet',65.0,1.68,2),(3,'Luis','Martínez','M','1978-12-01','Torrent',80.3,1.80,3),(4,'Laura','Sánchez','F','2000-07-10','Dos Hermanas',55.0,1.60,4),(5,'Pedro','Ruiz','M','1995-04-19','Móstoles',90.0,1.85,5),(6,'Ana','López','F','1982-08-08','Badalona',62.0,1.70,6),(7,'Jorge','Navarro','M','1980-02-10','Zaragoza',84.0,1.78,7),(8,'Carmen','Delgado','F','1975-11-25','Rincón de la Victoria',58.0,1.62,8),(9,'Andrés','Molina','M','1999-09-01','Getxo',70.0,1.70,9),(10,'Beatriz','Ortiz','F','2003-03-15','Torremolinos',52.0,1.65,10),(11,'Lucas','Gil','M','1992-12-30','Zaragoza',76.5,1.79,7),(12,'Sara','Ibáñez','F','1987-04-17','Getxo',60.0,1.67,9);
+INSERT INTO `pacientes` VALUES (1,'Juan','Pérez','M','1985-06-15',72.5,1.75,1),(2,'María','Gómez','F','1990-03-22',65.0,1.68,2),(3,'Luis','Martínez','M','1978-12-01',80.3,1.80,3),(4,'Laura','Sánchez','F','2000-07-10',55.0,1.60,4),(5,'Pedro','Ruiz','M','1995-04-19',90.0,1.85,5),(6,'Ana','López','F','1982-08-08',62.0,1.70,6),(7,'Jorge','Navarro','M','1980-02-10',84.0,1.78,7),(8,'Carmen','Delgado','F','1975-11-25',58.0,1.62,8),(9,'Andrés','Molina','M','1999-09-01',70.0,1.70,9),(10,'Beatriz','Ortiz','F','2003-03-15',52.0,1.65,10),(11,'Lucas','Gil','M','1992-12-30',76.5,1.79,7),(12,'Sara','Ibáñez','F','1987-04-17',60.0,1.67,9),(13,'Paco','Pil','M','1995-03-02',80.0,2.00,7);
 /*!40000 ALTER TABLE `pacientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,4 +221,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-28 13:45:21
+-- Dump completed on 2025-05-30  9:10:39
