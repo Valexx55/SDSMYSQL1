@@ -298,3 +298,38 @@ FROM
 GROUP BY alergias.nombre
 ORDER BY num_pacientes ASC
 LIMIT 1; -- TODO mejorar para que salgan más en caso de empate
+
+
+-- ALERGIAS QUE TIENEN LOS DISTINTOS PACIENTES se repiten por no usar Distinct
+
+SELECT a.nombre
+FROM alergias a
+JOIN paciente_alergia pa ON a.alergia_id = pa.alergia_id;
+
+-- ALERGIAS QUE TIENEN LOS DISTINTOS PACIENTES NO se repiten AL USAR Distinct
+
+SELECT DISTINCT a.nombre
+FROM alergias a
+JOIN paciente_alergia pa ON a.alergia_id = pa.alergia_id;
+
+-- CUÁNTAS ESPECIALIDADES MÉDICAS TENGO EN MI EQUIPO MÉDICO
+/**
+contar las especialidades de cada médico
+sólo las distintas
+*/
+
+SELECT COUNT(especialidad) FROM doctores; -- salen repes / MISMO DATO QUE DOCTORES
+
+SELECT COUNT(DISTINCT especialidad) FROM doctores; -- EVITAMOS EL REPE AL USAR DISTINCT
+
+
+
+-- EL NÚMERO DE PACIENTES AGRUPADOS POR EL PESO, DE 10 EN 10, DE MENOR A MAYOR
+
+SELECT 
+    COUNT(*) AS num_pacientes_grupo,
+    FLOOR(peso / 10) * 10 AS grupo_peso
+FROM
+    pacientes
+GROUP BY grupo_peso
+ORDER BY grupo_peso ASC;
