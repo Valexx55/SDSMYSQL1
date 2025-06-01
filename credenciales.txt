@@ -1,11 +1,11 @@
 PARA CONECTARSE
 Url: https://labremoto.com/
 user: sql1
-pwd: Mikr0%Servicios
+pwd: Mikr0%Servici0s
 
 ADMIN MÁQUINA (sudo terminal)
 user: root
-pwd: Mikr0%Servicios
+pwd: Mikr0%Servici0s
 
 BASE DATOS 
 user: root
