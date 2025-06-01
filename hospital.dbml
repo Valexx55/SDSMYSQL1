@@ -1,0 +1,37 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table pacientes {
+  paciente_id int [primary key, increment]
+  nombre varchar(30)
+  apellido varchar(30)
+  genero varchar(1)
+  fecha_nacimiento date
+  poblacion varchar(30)
+  peso decimal(4,1)
+  altura decimal (3,2) 
+  alergias varchar (80)
+  provincia_id integer [ref: - provincias.provincia_id, not null]
+  
+}
+
+Table doctores {
+  doctor_id integer [primary key, increment]
+  nombre varchar(30)
+  apellido varchar(30)
+  especialidad varchar(25)
+}
+
+Table admisiones {
+  admisiones_id integer [primary key, increment]
+  fecha_admision datetime
+  fecha_alta datetime
+  diagnostico varchar (50)
+  paciente_id integer [ref: - pacientes.paciente_id, not null]  
+  doctor_id integer [ref: - doctores.doctor_id]
+}
+
+Table provincias {
+  provincia_id integer [primary key, increment]
+  nombre varchar(30)
+}
