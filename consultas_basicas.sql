@@ -286,6 +286,54 @@ GROUP BY alergias.nombre
 ORDER BY num_pacientes DESC
 LIMIT 1; -- TODO mejorar para que salgan más en caso de empate
 
+-- MISMA LÓGICA, CON SUBOCUNLTAS Y CTES
+
+SELECT 
+    nombre, cantidad -- seleccionamos la cantidad que sea igual al máximo: filtro la subconsulta 1 con los datos de la subconsulta 2
+FROM
+    (SELECT -- seleccionamos las veces que aparecen cada alergia (1)
+        a.nombre, COUNT(*) AS cantidad
+    FROM
+        paciente_alergia pa
+    JOIN alergias a ON pa.alergia_id = a.alergia_id
+    GROUP BY pa.alergia_id , a.nombre) AS p
+WHERE
+    cantidad = (SELECT 
+            MAX(cantidad) -- seleccionar el número máximo de las distitnas alergias en la tabla intermedia (2)
+        FROM
+            (SELECT 
+                COUNT(*) AS cantidad
+            FROM
+                paciente_alergia
+            GROUP BY alergia_id) AS sub);
+
+-- CTE - COMMON TABLE EXPRESSIONS - tablas temporales, vistas - sólo disponibles a partir de la versión 8
+
+WITH alergias_con_conteo AS (
+    SELECT 
+        a.nombre,
+        COUNT(*) AS cantidad
+    FROM
+        paciente_alergia pa
+    JOIN 
+        alergias a ON pa.alergia_id = a.alergia_id
+    GROUP BY 
+        a.nombre
+),
+cantidad_maxima AS (
+    SELECT MAX(cantidad) AS max_cantidad
+    FROM alergias_con_conteo
+)
+SELECT 
+    ac.nombre,
+    ac.cantidad
+FROM 
+    alergias_con_conteo ac
+JOIN 
+    cantidad_maxima cm ON ac.cantidad = cm.max_cantidad;
+
+
+
 
 -- CONSULTAR LA ALERGIA MENOS COMÚN
 
@@ -333,3 +381,85 @@ FROM
     pacientes
 GROUP BY grupo_peso
 ORDER BY grupo_peso ASC;
+
+
+-- más ejemplos con LIMIT VS CTES
+
+-- qué paciente ha estaod más tiempo ingresado (en admisiones)
+
+SELECT 
+    p.paciente_id,
+    p.nombre,
+    p.apellido,
+    SUM(DATEDIFF(
+        IF(a.fecha_alta IS NOT NULL, a.fecha_alta, CURDATE()), 
+        a.fecha_admision
+    )) AS dias_totales
+FROM 
+    admisiones a
+JOIN 
+    pacientes p ON a.paciente_id = p.paciente_id
+GROUP BY 
+    p.paciente_id, p.nombre, p.apellido
+ORDER BY 
+    dias_totales DESC
+LIMIT 1;
+
+
+-- INTENTAD, HACER LA CONSULTA ANTERIOR, COMO SUBCONSULTAS CON CTE
+-- (1) CALCULAMOS LOS DÍAS TOTALES, INGRESADOS POR PACIENTES
+-- (2) OBTENGO EL MÁXIMO DE DÍAS
+--  (3) ME QUEDON CON LOS PACIENTES DE (1) QUE TENGAN LOS DÍAS DE (2)
+
+WITH dias_por_paciente AS(
+SELECT 
+    p.paciente_id,
+    p.nombre,
+    p.apellido,
+    SUM(DATEDIFF(
+        IF(a.fecha_alta IS NOT NULL, a.fecha_alta, CURDATE()), 
+        a.fecha_admision
+    )) AS dias_totales
+FROM 
+    admisiones a
+JOIN 
+    pacientes p ON a.paciente_id = p.paciente_id
+GROUP BY 
+    p.paciente_id, p.nombre, p.apellido
+), maximo AS (
+SELECT MAX(dias_totales) AS max_dias FROM dias_por_paciente
+)
+SELECT
+	d.paciente_id,
+    d.nombre, 
+    d.apellido,
+    d.dias_totales
+FROM dias_por_paciente d
+JOIN maximo m ON d.dias_totales = m.max_dias;
+
+-- DATOS CALCULADOS/AGREGADOS/FLAG
+/**
+MUESTRA ID, ALTURA Y PESO Y SI UN PACIENTE ES SOBREPESO ( CON 0 0 1) Y SOBREPESO SI SU IMC ES MAYOR O IGUAL 25
+//imc = PESO (KG) / estatutra * estatura
+**/
+
+SELECT 
+    paciente_id,
+    peso,
+    altura,
+    peso / (POWER(p.altura,2)) >= 25 AS sobrepeso
+FROM
+    pacientes p
+ORDER BY sobrepeso DESC;
+
+SELECT paciente_id, peso, altura,
+  (CASE 
+      WHEN (peso/POWER(p.altura,2)) >= 25 THEN
+          1
+      ELSE
+          0
+      END) AS SOBREPESO
+FROM pacientes p
+ORDER BY sobrepeso DESC;
+
+
